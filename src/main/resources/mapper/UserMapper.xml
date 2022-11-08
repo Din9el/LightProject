@@ -1,0 +1,129 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dingel.server.mapper.UserMapper">
+
+    <resultMap id="SelectUsersExport" type="com.dingel.server.pojo.dto.Excel.ExcelUsers">
+        <id column="id" property="id"/>
+        <result property="userId" column="r_id"/>
+        <result property="username" column="name"/>
+        <result property="password" column="r_password"/>
+        <result property="sex" column="sex"/>
+        <result property="idCard" column="id_card"/>
+        <result property="phone" column="phone"/>
+        <result property="type" column="t_type"/>
+        <result property="state" column="state"/>
+        <result property="email" column="email"/>
+    </resultMap>
+
+
+    <!--添加用户-->
+    <insert id="insertUser" parameterType="hashmap" >
+        INSERT INTO users ( r_id, `name`, r_password, t_type,phone,email,id_card,sex)
+        VALUES
+            (
+                #{r_id},
+                #{name},
+                '$2a$10$8XHYgI7bx48BUwVKlAMa5.4fcrHe82r/ocqOhMtteA68TjN1Wooa6',
+                #{t_type},
+                #{phone},
+                #{email},
+                #{id_card},
+                #{sex}
+            )
+    </insert>
+
+
+
+    <!--更新用户-->
+    <update id="updateUser" parameterType="hashmap">
+        UPDATE users
+        <set>
+            <if test="null!=name and ''!=name">
+                users.`name` = #{name},
+            </if>
+            <if test="null!=t_type and ''!=t_type">
+                users.t_type = #{t_type},
+            </if>
+            <if test="null!=state and ''!=state">
+                users.state = #{state},
+            </if>
+            <if test="null!=idCard and ''!=idCard">
+                users.id_card = #{idCard},
+            </if>
+            <if test="null!=email and ''!=email">
+                users.email = #{email},
+            </if>
+            <if test="null!=phone and ''!=phone">
+                users.phone = #{phone},
+            </if>
+            <if test="null!=sex and ''!=sex">
+                users.sex = #{sex}
+            </if>
+
+            <if test="0==deleteNum">
+                users.is_delete = #{deleteNum}
+            </if>
+        </set>
+        WHERE
+        users.id = #{id}
+    </update>
+
+
+    <!--用户导出-->
+    <select id="SelectUsersToExcel" resultMap="SelectUsersExport">
+        select *
+        from users where users.is_delete = '1'
+    </select>
+
+    <!-- 查询导入的用户是否已存在-->
+    <select id="SelectUser" parameterType="String" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            users
+        WHERE
+            r_id = #{userId}
+    </select>
+
+    <!--若用户已存在则删除该用户再插入-->
+    <delete id="DeleteUser" parameterType="String">
+        DELETE
+        FROM
+            users
+        WHERE
+            r_id = #{userId}
+    </delete>
+
+
+    <!--导入用户信息-->
+    <insert id="importUser" parameterType="com.dingel.server.pojo.dto.Excel.ExcelUsers">
+        INSERT INTO users (id,r_id, NAME, r_password, t_type, state, id_card, email, phone, sex )
+        VALUES
+            (
+                #{id},
+                #{userId},
+                #{username},
+                #{password},
+                #{type},
+                #{state},
+                #{idCard},
+                #{email},
+                #{phone},
+                #{sex})
+    </insert>
+
+
+
+<!--批量删除-->
+    <delete id="deleteBathIds" parameterType="java.lang.Integer">
+        delete from users where id in
+             <foreach collection="list" item="id"  separator="," open="(" close=")">
+                    #{id}
+                 </foreach>
+    </delete>
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,103 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dingel.server.mapper.MenuMapper">
+    <resultMap id="MenuResultMap" type="com.dingel.server.pojo.dto.Menu">
+        <id column="menu_id" property="menuId"/>
+        <result column="url" property="url" />
+        <result column="menu_name" property="menuName" />
+        <result column="path" property="path" />
+        <result column="component" property="component" />
+        <result column="parentId" property="parentId" />
+        <collection property="children" ofType="com.dingel.server.pojo.dto.Menu">
+            <id column="id2" property="menuId"/>
+            <result column="name2" property="menuName" />
+            <result column="url2" property="url" />
+            <result column="path2" property="path" />
+            <result column="component2" property="component" />
+            <result column="parentId2" property="parentId" />
+            <collection property="children" ofType="com.dingel.server.pojo.dto.Menu">
+                <id column="id3" property="menuId"/>
+                <result column="name3" property="menuName" />
+                <result column="url3" property="url" />
+                <result column="path3" property="path" />
+                <result column="component3" property="component" />
+                <result column="parentId3" property="parentId" />
+            </collection>
+        </collection>
+    </resultMap>
+    <resultMap id="SelectRoleMenuId" type="com.dingel.server.pojo.dto.UserMenuAuthority">
+        <result column="menu_id" property="menuId"/>
+    </resultMap>
+    <!-- 查询全部菜单-->
+<select id="SelectAllMenu" resultMap="MenuResultMap">
+       SELECT
+        m1.*,
+        m2.menu_id AS id2,
+        m2.url AS url2,
+        m2.menu_name AS name2,
+        m2.path AS path2,
+        m2.component AS component2,
+        m2.parentId AS parentId2,
+        m3.menu_id AS id3,
+        m3.url AS url3,
+        m3.menu_name AS name3,
+        m3.path AS path3,
+        m3.component AS component3,
+        m3.parentId AS parentId3
+    FROM
+        menu m1,
+        menu m2,
+        menu m3
+    WHERE
+        m1.menu_id = m2.parentId
+      AND m2.menu_id = m3.parentId
+
+
+</select>
+<!-- 根据id查询菜单-->
+    <select id="SelectMenuById" parameterType="Integer" resultMap="MenuResultMap">
+        SELECT
+            m1.*,
+            m2.menu_id AS id2,
+            m2.url AS url2,
+            m2.menu_name AS name2,
+            m2.path AS path2,
+            m2.component AS component2,
+            m2.parentId AS parentId2
+        FROM
+            menu m1,
+            menu m2,
+            user_menu_authority uma
+        WHERE
+            m1.menu_id = m2.parentId
+          AND ( uma.menu_id = m1.menu_id OR uma.menu_id = m2.menu_id )
+          AND uma.role_id = #{id}
+
+    </select>
+
+    <select id="SelectMenuIdByRoleId" resultType="Integer" parameterType="Integer">
+        SELECT
+            user_menu_authority.menu_id
+        FROM
+            user_menu_authority
+        WHERE
+            user_menu_authority.role_id = #{id}
+    </select>
+    <!--更新之前删除该角色原有菜单-->
+    <delete id="DeleteMenusById" parameterType="Integer">
+        DELETE
+        FROM
+            user_menu_authority
+        WHERE
+            user_menu_authority.role_id = #{id}
+    </delete>
+
+    <!--更新角色菜单-->
+    <insert id="InsertMenusById" parameterType="Integer">
+        insert into user_menu_authority(role_id,menu_id) values
+        <foreach collection="mids" item="mid" separator=",">
+            (#{rid},#{mid})
+        </foreach>
+    </insert>
+
+
+</mapper>

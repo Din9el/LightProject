@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dingel.server.mapper.PotentialCustomersMapper">
+
+    <resultMap id="PotentialCustomersMap" type="com.dingel.server.pojo.dto.Excel.ExcelPotentialCustomers">
+        <id property="id" column="id"/>
+        <result property="customersPhone" column="customers_phone"/>
+        <result property="customersIdCard" column="customers_idCard"/>
+        <result property="customersAddress" column="customers_address"/>
+        <result property="customersEmail" column="customers_email"/>
+        <result property="customersName" column="customers_name"/>
+        <result property="intention" column="intention"/>
+        <result property="sex" column="sex"/>
+    </resultMap>
+
+
+    <!--客户导出-->
+    <select id="ExportPotentialCustomers" resultMap="PotentialCustomersMap">
+        select * from potential_customers
+    </select>
+
+
+
+     <!-- 查询导入的客户是否已存在-->
+    <select id="selectPotentialCustomers" parameterType="String" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            potential_customers
+        WHERE
+            id = #{customerId}
+    </select>
+
+    <!--若用户已存在则删除该用户再插入-->
+    <delete id="deletePotentialCustomers" parameterType="String">
+        DELETE
+        FROM
+            potential_customers
+        WHERE
+            id = #{customerId}
+    </delete>
+
+
+    <!--导入用户信息-->
+    <insert id="importPotentialCustomers" parameterType="com.dingel.server.pojo.dto.Excel.ExcelCustomer">
+        INSERT INTO potential_customers (customers_name, customers_phone, customers_idCard,customers_address,customers_email,sex,intention)
+        VALUES
+            (
+                #{customersName},
+                #{customersPhone},
+                #{customersIdCard},
+                #{customersAddress},
+                #{customersEmail},
+                #{sex},
+                #{intention}
+             )
+    </insert>
+
+
+
+
+    <!--新增客户-->
+    <insert id="insertPotentialCustomers" parameterType="hashmap" >
+        INSERT INTO potential_customers (customers_name, customers_phone, customers_idCard,customers_address,customers_email,sex,intention)
+        VALUES
+            (
+                #{customersName},
+                #{customersPhone},
+                #{customersIdCard},
+                #{customersAddress},
+                #{customersEmail},
+                #{sex},
+                #{intention}
+            )
+    </insert>
+
+
+
+    <!--更新客户-->
+    <update id="updatePotentialCustomer" parameterType="hashmap">
+        UPDATE potential_customers
+        <set>
+            <if test="null!=customersName and ''!=customersName">
+                potential_customers.`customers_name` = #{customersName},
+            </if>
+            <if test="null!=customersPhone and ''!=customersPhone">
+                potential_customers.customers_phone = #{customersPhone},
+            </if>
+            <if test="null!=customersIdCard and ''!=customersIdCard">
+                potential_customers.customers_idCard = #{customersIdCard},
+            </if>
+            <if test="null!=customersAddress and ''!=customersAddress">
+                potential_customers.customers_address = #{customersAddress},
+            </if>
+            <if test="null!=customersEmail and ''!=customersEmail">
+                potential_customers.customers_email = #{customersEmail},
+            </if>
+            <if test="null!=sex and ''!=sex">
+                potential_customers.sex = #{sex},
+            </if>
+            <if test="null!=intention and ''!=intention">
+                potential_customers.intention = #{intention},
+            </if>
+
+        </set>
+        WHERE
+        potential_customers.id = #{id}
+    </update>
+
+
+
+    <!--批量删除-->
+    <delete id="deleteBathPCIds" parameterType="java.lang.Integer">
+        delete from potential_customers where id in
+            <foreach collection="list" item="id"  separator="," open="(" close=")">
+                #{id}
+            </foreach>
+    </delete>
+
+
+
+</mapper>
