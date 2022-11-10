@@ -84,7 +84,7 @@
             r_id = #{userId}
     </select>
 
-    <!--若用户已存在则删除该用户再插入-->
+    <!--若用户已存在则删除该用户再插入12-->
     <delete id="DeleteUser" parameterType="String">
         DELETE
         FROM
