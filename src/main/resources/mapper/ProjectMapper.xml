@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dingel.server.mapper.ProjectMapper">
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--登记项目-->
+    <insert id="insertProject" parameterType="hashmap" >
+        INSERT INTO project (proId, proName, proDepartment,proManager,proStage,proCreateTime,proScale,proPlace,proType,proContent)
+        VALUES
+            (
+                #{proId},
+                #{proname},
+                #{prodepartment},
+                #{promanager},
+                #{prostage},
+                #{procreateTime},
+                #{proscale},
+                #{proplace},
+                #{protype},
+                #{procontent}
+            )
+    </insert>
+
+
+
+
+
+
+
+
+
+
+</mapper>

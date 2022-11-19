@@ -59,15 +59,10 @@ public class CaptchaController {
         // 使用HttpServletResponse将图片写入到浏览器中
         captchaOutputStream = imgOutputStream.toByteArray();
         /// 通过response设定响应请求类型
-        //
         // no-store用于防止重要的信息被无意的发布。在请求消息中发送将使得请求和响应消息都不使用缓存。
         response.setHeader("Cache-Control", "no-store");
         // no-cache指示请求或响应消息不能缓存
         response.setHeader("Pragma", "no-cache");
-        /* expires是response的一个属性,它可以设置页面在浏览器的缓存里保存的时间 ,超过设定的时间后就过期 。
-        过期后再次浏览该页面就需要重新请求服务器发送页面数据，
-        如果在规定的时间内再次访问次页面 就不需从服务器传送 直接从缓存中读取。
-         * */
         response.setDateHeader("Expires", 0);
         // servlet接受request请求后接受图片形式的响应
         response.setContentType("image/jpeg");

@@ -1,0 +1,105 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dingel.server.mapper.StatisticsMapper">
+
+    <resultMap id="selectStatisticsMap" type="com.dingel.server.pojo.dto.Statistics">
+        <id column="id" property="id"/>
+        <result column="statistic_name" property="statisticName"/>
+        <result column="statistic_count" property="statisticCount"/>
+        <result column="statistic_proportion" property="statisticProportion"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+
+    <select id="selectStatistics" resultMap="selectStatisticsMap">
+        SELECT
+            *
+        FROM
+            `statistics`
+        where type = #{type}
+    </select>
+
+    <insert id="insertStatistics" parameterType="com.dingel.server.pojo.dto.Statistics">
+        INSERT INTO statistics ( statistic_name, statistic_count, statistic_proportion,type)
+        VALUES
+            (
+                #{statisticName},
+                #{statisticCount},
+                #{statisticProportion},
+                #{type})
+    </insert>
+
+    <!--统计客户地址-->
+    <select id="selectAddressCount" resultMap="selectStatisticsMap">
+        SELECT
+            customers_address as statistic_name,
+            COUNT( customers_address ) AS statistic_count
+        FROM
+            customer
+        GROUP BY
+            customers_address
+    </select>
+
+    <!--统计航班购买数量-->
+    <select id="selectLightCount" resultMap="selectStatisticsMap">
+        SELECT
+            flight_name as statistic_name,
+            COUNT( flight_id ) AS statistic_count
+        FROM
+            `order`,
+            flight
+        WHERE
+            `order`.flight_id = flight.id
+        GROUP BY
+            flight_id
+    </select>
+
+    <!--统计服务五星评价数量-->
+    <select id="selectEvaluateCount" resultMap="selectStatisticsMap">
+        SELECT NAME AS
+                                      statistic_name,
+               COUNT( service_id ) AS statistic_count
+        FROM
+            evaluate,
+            service
+        WHERE
+            evaluate.service_id = service.id
+          AND evaluate.grade = 5
+        GROUP BY
+            service_id
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            customer
+    </select>
+
+
+    <select id="selectAllOrderCount" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            `order`
+    </select>
+
+    <select id="selectAllEvaluateCount" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            evaluate
+        where
+            evaluate.grade = 5
+    </select>
+
+    <!--清空-->
+    <delete id="deleteAllStatistics">
+        DELETE
+        FROM
+            statistics
+        WHERE
+            type = #{type}
+    </delete>
+
+
+</mapper>
