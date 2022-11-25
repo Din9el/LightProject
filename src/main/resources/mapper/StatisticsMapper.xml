@@ -42,31 +42,17 @@
     <!--统计航班购买数量-->
     <select id="selectLightCount" resultMap="selectStatisticsMap">
         SELECT
-            flight_name as statistic_name,
-            COUNT( flight_id ) AS statistic_count
+            customers_address as statistic_name,
+            COUNT(intention) AS statistic_count
         FROM
-            `order`,
-            flight
+            potential_customers
         WHERE
-            `order`.flight_id = flight.id
+            intention=1
         GROUP BY
-            flight_id
+            customers_address
     </select>
 
-    <!--统计服务五星评价数量-->
-    <select id="selectEvaluateCount" resultMap="selectStatisticsMap">
-        SELECT NAME AS
-                                      statistic_name,
-               COUNT( service_id ) AS statistic_count
-        FROM
-            evaluate,
-            service
-        WHERE
-            evaluate.service_id = service.id
-          AND evaluate.grade = 5
-        GROUP BY
-            service_id
-    </select>
+
 
     <select id="selectAllCount" resultType="int">
         SELECT

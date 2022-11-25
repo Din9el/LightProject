@@ -40,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //放行静态资源
         web.ignoring().antMatchers(
                 "/login",
+                "/upload",
                 "/logout",
                 "/css/**",
                 "/js/**",

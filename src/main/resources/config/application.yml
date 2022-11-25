@@ -74,6 +74,12 @@ jwt:
   tokenHead: Bearer
 
 
+oss:
+  accessKey: 9UNe7B7Q5eE_sV_DPizJIMtJxtfcEOSwFoPuplsQ
+  secretKey: y9BBPmBqWivtnLDiqCN8F63qbr_n2y9T_s1OpSol
+  bucket: dd-dd
+
+
 
 
 

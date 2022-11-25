@@ -19,6 +19,5 @@ public interface StatisticsService extends IService<Statistics> {
 
     void insertLightStatistics();
 
-    void insertOrderStatistics();
 }
 

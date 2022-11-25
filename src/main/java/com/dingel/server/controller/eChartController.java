@@ -21,7 +21,6 @@ public class eChartController {
     public ResponseBean insertStatistics(){
         statisticsService.insertAddressStatistics();
         statisticsService.insertLightStatistics();
-        statisticsService.insertOrderStatistics();
         return ResponseBean.success("更新成功!");
     }
 

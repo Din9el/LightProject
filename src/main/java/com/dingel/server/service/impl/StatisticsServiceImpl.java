@@ -23,7 +23,7 @@ public class StatisticsServiceImpl extends ServiceImpl<StatisticsMapper, Statist
     private StatisticsMapper statisticsMapper;
 
     @Override
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void insertAddressStatistics() {
         List<Statistics> statisticsList = statisticsMapper.selectAddressCount();
         int allCount = statisticsMapper.selectAllCount();
@@ -33,7 +33,7 @@ public class StatisticsServiceImpl extends ServiceImpl<StatisticsMapper, Statist
             statistics.setType(1);
             statisticsMapper.insertStatistics(statistics);
         }
-        System.out.println("1");
+
     }
 
     @Override
@@ -49,18 +49,6 @@ public class StatisticsServiceImpl extends ServiceImpl<StatisticsMapper, Statist
         }
     }
 
-    @Override
-    @Scheduled(cron = "0 0 9 * * ?")
-    public void insertOrderStatistics() {
-        List<Statistics> statisticsBeans = statisticsMapper.selectEvaluateCount();
-        int allCount = statisticsMapper.selectAllEvaluateCount();
-        statisticsMapper.deleteAllStatistics(3);
-        for (Statistics statistics : statisticsBeans){
-            statistics.setStatisticProportion(statistics.getStatisticCount()/allCount);
-            statistics.setType(3);
-            statisticsMapper.insertStatistics(statistics);
-        }
-    }
 
     @Override
     public List<Statistics> selectStatistics(int type) {

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dingel.server.mapper.ProductMapper">
+
+    <resultMap id="SelectProductsExport" type="com.dingel.server.pojo.dto.Excel.ExcelProducts">
+        <id column="id" property="id"/>
+        <result property="productName" column="product_Name"/>
+        <result property="productType" column="product_Type"/>
+        <result property="productModel" column="product_Model"/>
+        <result property="productNum" column="product_Num"/>
+        <result property="productImg" column="product_Img"/>
+
+    </resultMap>
+
+
+    <!--用户导出-->
+    <select id="ExportProducts" resultMap="SelectProductsExport">
+        select * from product
+    </select>
+
+
+
+
+    <!--产品添加-->
+    <insert id="insertProduct" parameterType="hashmap" >
+        INSERT INTO product (product_name, product_type, product_model,product_num,product_img)
+        VALUES
+            (
+                #{productName},
+                #{productType},
+                #{productModel},
+                #{productNum},
+                #{productImg}
+            )
+    </insert>
+
+
+
+
+
+    <!-- 查询导入产品是否已存在-->
+    <select id="SelectProducts" parameterType="String" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            product
+        WHERE
+            id = #{id}
+    </select>
+
+    <!--若产品已存在则删除该用户再插入-->
+    <delete id="DeleteProducts" parameterType="String">
+        DELETE
+        FROM
+            product
+        WHERE
+            id = #{id}
+    </delete>
+
+
+    <!--导入产品信息-->
+    <insert id="importProducts" parameterType="com.dingel.server.pojo.dto.Excel.ExcelProducts">
+        INSERT INTO product (id,product_name, product_type, product_model,product_num,product_img)
+        VALUES
+            (
+                #{id},
+                #{productName},
+                #{productType},
+                #{productModel},
+                #{productNum},
+                #{productImg}
+            )
+    </insert>
+
+
+
+
+
+
+</mapper>

@@ -29,7 +29,7 @@ public interface StatisticsMapper extends BaseMapper<Statistics> {
 
     List<Statistics> selectEvaluateCount();
 
-    int selectAllEvaluateCount();
+
 
     List<Statistics> selectStatistics(int type);
 
