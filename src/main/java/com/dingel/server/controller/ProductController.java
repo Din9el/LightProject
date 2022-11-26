@@ -3,11 +3,9 @@ package com.dingel.server.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.dingel.server.pojo.dto.Customer;
 import com.dingel.server.pojo.dto.Product;
 import com.dingel.server.pojo.dto.Project;
 import com.dingel.server.pojo.dto.ResponseBean;
-import com.dingel.server.pojo.dto.vo.CustomerVO;
 import com.dingel.server.pojo.dto.vo.ProductVO;
 import com.dingel.server.service.ProductService;
 import io.swagger.annotations.ApiOperation;
@@ -84,6 +82,13 @@ public class ProductController {
     public ResponseBean batchRemove(@RequestBody List<String> idList) {
         productService.deleteByIds(idList);
         return ResponseBean.success("删除成功");
+    }
+
+    @ApiOperation("根据项目编号查询")
+    @GetMapping("/getXxx/{id}")
+    public ResponseBean getXxx(@PathVariable String id){
+        Product product = productService.getById(id);
+        return ResponseBean.success("成功",product);
     }
 
 

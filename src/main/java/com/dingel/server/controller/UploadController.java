@@ -15,8 +15,8 @@ public class UploadController {
     private UploadService uploadService;
 
     @PostMapping("/policy")
-    public ResponseBean uploadImg(MultipartFile img) throws IOException {
-        return uploadService.uploadImg(img);
+    public ResponseBean uploadImg(MultipartFile file) throws IOException {
+        return uploadService.uploadImg(file);
     }
 
 
