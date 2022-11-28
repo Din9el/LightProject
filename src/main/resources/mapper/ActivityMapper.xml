@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dingel.server.mapper.ActivityMapper">
+
+    <resultMap id="ActivityMap" type="com.dingel.server.pojo.dto.Excel.ExcelActivity">
+        <id property="id" column="id"/>
+        <result property="activityName" column="activity_name"/>
+        <result property="activityPlace" column="activity_place"/>
+        <result property="activityMoney" column="activity_money"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="activityState" column="activity_state"/>
+        <result property="activityCreater" column="activity_creater"/>
+    </resultMap>
+
+
+    <!--活动导出-->
+    <select id="ExportActivity" resultMap="ActivityMap">
+        select * from activity
+    </select>
+
+
+
+     <!-- 查询导入的活动是否已存在-->
+    <select id="selectActivity" parameterType="String" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            activity
+        WHERE
+            id = #{id}
+    </select>
+
+    <!--若活动已存在则删除该用户再插入-->
+    <delete id="deleteActivity" parameterType="String">
+        DELETE
+        FROM
+            activity
+        WHERE
+            id = #{id}
+    </delete>
+
+
+    <!--导入活动信息-->
+    <insert id="importActivity" parameterType="com.dingel.server.pojo.dto.Excel.ExcelCustomer">
+        INSERT INTO activity (activity_name, activity_place, activity_money,start_time,end_time,activity_state,activity_creater)
+        VALUES
+            (
+
+                #{activityName},
+                #{activityPlace},
+                #{activityMoney},
+                #{startTime},
+                #{endTime},
+                #{activityState},
+                #{activityCreater}
+             )
+    </insert>
+
+
+
+    <!--活动登记-->
+    <insert id="insertActivity" parameterType="hashmap" >
+        INSERT INTO activity (activity_name, activity_place, activity_money,start_time,end_time,activity_state,activity_creater)
+        VALUES
+            (
+
+                #{activityName},
+                #{activityPlace},
+                #{activityMoney},
+                #{startTime},
+                #{endTime},
+                #{activityState},
+                #{activityCreater}
+             )
+    </insert>
+
+
+
+    <!--更新活动-->
+    <update id="updateActivity" parameterType="hashmap">
+        UPDATE activity
+        <set>
+            <if test="null!=customersName and ''!=customersName">
+                customer.`customers_name` = #{customersName},
+            </if>
+            <if test="null!=customersPhone and ''!=customersPhone">
+                customer.customers_phone = #{customersPhone},
+            </if>
+            <if test="null!=customersIdCard and ''!=customersIdCard">
+                customer.customers_idCard = #{customersIdCard},
+            </if>
+            <if test="null!=customersAddress and ''!=customersAddress">
+                customer.customers_address = #{customersAddress},
+            </if>
+            <if test="null!=customersEmail and ''!=customersEmail">
+                customer.customers_email = #{customersEmail},
+            </if>
+            <if test="null!=sex and ''!=sex">
+                customer.sex = #{sex},
+            </if>
+
+        </set>
+        WHERE
+        customer.id = #{id}
+    </update>
+
+
+
+    <!--批量删除-->
+    <delete id="deleteBathCIds" parameterType="java.lang.Integer">
+        delete from activity where id in
+            <foreach collection="list" item="id"  separator="," open="(" close=")">
+                #{id}
+            </foreach>
+    </delete>
+
+
+
+</mapper>

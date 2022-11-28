@@ -10,8 +10,11 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -69,4 +72,16 @@ public class ProjectController {
 
     }
 
+
+    @ApiOperation(value = "导出项目",produces = "application/octet-stream")
+    @GetMapping("/ExportProject")
+    public void ExportProject(HttpServletResponse response) throws IOException {
+        projectService.ExportProject(response);
+    }
+
+    @ApiOperation(("导入项目"))
+    @PostMapping("ImportProject")
+    public ResponseBean ImportProject(@RequestPart(value = "file") MultipartFile excelFile) throws Exception{
+        return projectService.ImportProject(excelFile);
+    }
 }

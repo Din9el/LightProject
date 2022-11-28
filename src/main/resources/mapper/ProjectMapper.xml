@@ -3,12 +3,67 @@
 <mapper namespace="com.dingel.server.mapper.ProjectMapper">
 
 
+    <resultMap id="SelectProjectExport" type="com.dingel.server.pojo.dto.Excel.ExcelProject">
+        <id column="id" property="id"/>
+        <result property="proid" column="proId"/>
+        <result property="proname" column="proName"/>
+        <result property="prodepartment" column="proDepartment"/>
+        <result property="promanager" column="proManager"/>
+        <result property="prostage" column="proStage"/>
+        <result property="procreatetime" column="proCreateTime"/>
+        <result property="proscale" column="proScale"/>
+        <result property="proplace" column="proPlace"/>
+        <result property="protype" column="proType"/>
+        <result property="procontent" column="proContent"/>
+    </resultMap>
 
 
 
 
 
+    <!--导出-->
+    <select id="ExportProject" resultMap="SelectProjectExport">
+        select * from project
+    </select>
 
+    <!-- 查询导入是否已存在-->
+    <select id="SelectProject" parameterType="String" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            project
+        WHERE
+            proId = #{proid}
+    </select>
+
+    <!--若用户已存在则删除该用户再插入12-->
+    <delete id="DeleteProject" parameterType="String">
+        DELETE
+        FROM
+            project
+        WHERE
+            proId = #{proid}
+    </delete>
+
+
+    <!--导入用户信息-->
+    <insert id="importProject" parameterType="com.dingel.server.pojo.dto.Excel.ExcelProject">
+       INSERT INTO project (id,proId, proName, proDepartment,proManager,proStage,proCreateTime,proScale,proPlace,proType,proContent)
+        VALUES
+            (
+                #{id},
+                #{proid},
+                #{proname},
+                #{prodepartment},
+                #{promanager},
+                #{prostage},
+                #{procreatetime},
+                #{proscale},
+                #{proplace},
+                #{protype},
+                #{procontent}
+            )
+    </insert>
 
 
 
