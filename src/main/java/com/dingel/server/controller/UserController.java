@@ -25,7 +25,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    
+
 
     @ApiOperation(value = "获取管理用户分页列表")
     @PostMapping("fetchData/{page}/{limit}")
@@ -72,6 +72,8 @@ public class UserController {
     public ResponseBean InsertUser(@RequestBody HashMap<String,Object> map){
         return userService.insertUser(map);
     }
+
+
 
 
     @ApiOperation("修改用户信息")
@@ -135,6 +137,13 @@ public class UserController {
         return ResponseBean.success("状态更新成功");
     }
 
+
+    @ApiOperation(value = "更新登录密码")
+    @PostMapping("/changePassword")
+    public ResponseBean ChangePassword(@RequestBody HashMap<String,Object> hashMap) {
+       return userService.updatePassword(hashMap);
+
+    }
 
 
 

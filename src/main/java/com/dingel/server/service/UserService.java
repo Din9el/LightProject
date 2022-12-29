@@ -37,4 +37,5 @@ public interface UserService extends IService<Users> {
     void updateStatus(Integer id, Integer state);
 
 
+    ResponseBean updatePassword(HashMap<String, Object> hashMap);
 }

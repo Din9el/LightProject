@@ -29,10 +29,11 @@ public interface IAdminService extends IService<LoginUsers> {
     LoginUsers getAdminByRId(String username);
     /**
      * 根据id修改密码
-     * @param id
+     * @param rid
      * @param newPassword
      * @param request
      * @return
      */
-    ResponseBean changePasswordById(Integer id, String newPassword, HttpServletRequest request);
+    ResponseBean changePasswordById(String rid, String newPassword);
+
 }

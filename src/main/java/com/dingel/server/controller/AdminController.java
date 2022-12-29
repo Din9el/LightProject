@@ -1,9 +1,6 @@
 package com.dingel.server.controller;
 
-import com.dingel.server.pojo.dto.AdminLoginParam;
-import com.dingel.server.pojo.dto.ChangePwd;
-import com.dingel.server.pojo.dto.LoginUsers;
-import com.dingel.server.pojo.dto.ResponseBean;
+import com.dingel.server.pojo.dto.*;
 import com.dingel.server.service.IAdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,9 +51,7 @@ public class AdminController {
     public ResponseBean logout(){
         return ResponseBean.success("注销成功!");
     }
-    @ApiOperation(value = "更新登录密码")
-    @PostMapping("/changePassword")
-    public ResponseBean ChangePassword(ChangePwd changePwd, HttpServletRequest request) {
-        return adminService.changePasswordById(changePwd.getId(), changePwd.getNewPassword(), request);
-    }
+
+
+
 }

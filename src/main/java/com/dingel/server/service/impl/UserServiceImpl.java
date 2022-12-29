@@ -10,11 +10,11 @@ import com.dingel.server.mapper.UserMapper;
 import com.dingel.server.pojo.dto.*;
 import com.dingel.server.pojo.dto.Excel.ExcelUsers;
 import com.dingel.server.service.UserService;
-
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -29,12 +29,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, Users> implements U
     private UserMapper userMapper;
 
 
+
+
     //添加用户
     @Override
     public ResponseBean insertUser(HashMap<String,Object> hashMap) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Object rawPassword = hashMap.get("r_password");
+        String encodedPassword = passwordEncoder.encode((String)rawPassword);
+        System.out.println("原始密码："+ rawPassword);
+        System.out.println("加密后的密码"+ encodedPassword);
+        System.out.println(rawPassword + "是否匹配" + encodedPassword + ":"   //密码校验：true
+                + passwordEncoder.matches((String)rawPassword, encodedPassword));
+
+        hashMap.put( "r_password",encodedPassword);
         userMapper.insertUser(hashMap);
+
+
         return ResponseBean.success("新增成功");
     }
+
+
+
 
     //更新用户
     @Override
@@ -121,4 +137,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, Users> implements U
 
 
 
-}
+    //修改密码
+    @Override
+    public ResponseBean updatePassword(HashMap<String, Object> hashMap) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Object rawPassword = hashMap.get("r_password");
+        String encodedPassword = passwordEncoder.encode((String)rawPassword);
+        System.out.println("原始密码："+ rawPassword);
+        System.out.println("加密后的密码"+ encodedPassword);
+        System.out.println(rawPassword + "是否匹配" + encodedPassword + ":"   //密码校验：true
+                + passwordEncoder.matches((String)rawPassword, encodedPassword));
+        hashMap.put( "r_password",encodedPassword);
+        userMapper.updateUser(hashMap);
+        return ResponseBean.success("修改成功");
+
+
+    }
+
+
+    }
+
+
+
+

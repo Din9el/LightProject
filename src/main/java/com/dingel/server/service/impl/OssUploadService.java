@@ -70,7 +70,7 @@ public class OssUploadService implements UploadService {
                 Map<String, String> respMap = new LinkedHashMap<String, String>();
                 respMap.put("upToken", upToken); //获取的token
 
-                return "http://rlsed5dvg.bkt.gdipper.com/"+key;
+                return "http://dingel.xyz/"+key;
             } catch (QiniuException ex) {
                 Response r = ex.response;
                 System.err.println(r.toString());

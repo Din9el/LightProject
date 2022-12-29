@@ -22,7 +22,7 @@
             (
                 #{r_id},
                 #{name},
-                '$2a$10$8XHYgI7bx48BUwVKlAMa5.4fcrHe82r/ocqOhMtteA68TjN1Wooa6',
+                #{r_password},
                 #{t_type},
                 #{phone},
                 #{email},
@@ -30,6 +30,8 @@
                 #{sex}
             )
     </insert>
+
+
 
 
 
@@ -45,6 +47,9 @@
             </if>
             <if test="null!=state and ''!=state">
                 users.state = #{state},
+            </if>
+            <if test="null!=r_password and ''!=r_password">
+                users.r_password = #{r_password},
             </if>
             <if test="null!=idCard and ''!=idCard">
                 users.id_card = #{idCard},

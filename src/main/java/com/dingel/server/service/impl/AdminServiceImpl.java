@@ -7,6 +7,7 @@ import com.dingel.server.config.security.JwtTokenUtil;
 import com.dingel.server.mapper.AdminMapper;
 import com.dingel.server.pojo.dto.LoginUsers;
 import com.dingel.server.pojo.dto.ResponseBean;
+import com.dingel.server.pojo.dto.Users;
 import com.dingel.server.service.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -85,16 +87,17 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, LoginUsers> imple
     }
 
     @Override
-    public ResponseBean changePasswordById(Integer id, String newPassword, HttpServletRequest request) {
+    public ResponseBean changePasswordById(String rid, String newPassword) {
         if(passwordEncoder.matches(newPassword,
-                (adminMapper.selectOne(new QueryWrapper<LoginUsers>().eq("id", id))).getPassword())){
+                (adminMapper.selectOne(new QueryWrapper<LoginUsers>().eq("r_id", rid))).getRPassword())){
             return ResponseBean.error("新密码与原密码输入一致，请重新输入");
         }
         LoginUsers user =  new LoginUsers();
         user.setRPassword(passwordEncoder.encode(newPassword));
-        user.setId(id);
         adminMapper.updateById(user);
         return ResponseBean.success("修改成功!");
     }
+
+
 
 }
